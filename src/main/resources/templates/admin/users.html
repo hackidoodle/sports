@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Users - Admin</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+      }
+
+      .admin-header {
+        background: #2c3e50;
+        color: white;
+        padding: 1rem 0;
+      }
+
+      .admin-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .admin-logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .admin-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+
+      .admin-links a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background 0.3s;
+      }
+
+      .admin-links a:hover {
+        background: #34495e;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 20px;
+      }
+
+      .search-form {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .search-form input {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 1rem;
+        width: 300px;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .btn:hover {
+        background: #2980b9;
+      }
+
+      table {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      th {
+        background: #f8f9fa;
+        font-weight: bold;
+      }
+
+      tr:hover {
+        background: #f8f9fa;
+      }
+
+      .alert {
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-header">
+      <nav class="admin-nav">
+        <div class="admin-logo">Sporty Shoes Admin</div>
+        <ul class="admin-links">
+          <li><a href="/admin/dashboard">Dashboard</a></li>
+          <li><a href="/admin/users">Users</a></li>
+          <li><a href="/admin/products">Products</a></li>
+          <li><a href="/admin/categories">Categories</a></li>
+          <li><a href="/admin/reports">Reports</a></li>
+          <li><a href="/admin/change-password">Change Password</a></li>
+          <li><a href="/admin/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1>Manage Users</h1>
+
+      <div
+        th:if="${success}"
+        class="alert alert-success"
+        th:text="${success}"
+      ></div>
+
+      <div class="search-form">
+        <form method="get" action="/admin/users">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search users..."
+            th:value="${search}"
+          />
+          <button type="submit" class="btn">Search</button>
+          <a href="/admin/users" class="btn" style="margin-left: 1rem">Clear</a>
+        </form>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.phoneNumber ?: 'N/A'}"></td>
+            <td
+              th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd HH:mm')}"
+            ></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(users)}">
+            <td colspan="7" style="text-align: center; color: #666">
+              No users found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

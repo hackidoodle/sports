@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Products - Admin</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+      }
+
+      .admin-header {
+        background: #2c3e50;
+        color: white;
+        padding: 1rem 0;
+      }
+
+      .admin-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .admin-logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .admin-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+      }
+
+      .admin-links a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition: background 0.3s;
+      }
+
+      .admin-links a:hover {
+        background: #34495e;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 20px;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-bottom: 2rem;
+        display: inline-block;
+      }
+
+      .btn:hover {
+        background: #2980b9;
+      }
+
+      .btn-success {
+        background: #27ae60;
+      }
+
+      .btn-success:hover {
+        background: #229954;
+      }
+
+      table {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      th {
+        background: #f8f9fa;
+        font-weight: bold;
+      }
+
+      tr:hover {
+        background: #f8f9fa;
+      }
+
+      .alert {
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+
+      .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="admin-header">
+      <nav class="admin-nav">
+        <div class="admin-logo">Sporty Shoes Admin</div>
+        <ul class="admin-links">
+          <li><a href="/admin/dashboard">Dashboard</a></li>
+          <li><a href="/admin/users">Users</a></li>
+          <li><a href="/admin/products">Products</a></li>
+          <li><a href="/admin/categories">Categories</a></li>
+          <li><a href="/admin/reports">Reports</a></li>
+          <li><a href="/admin/change-password">Change Password</a></li>
+          <li><a href="/admin/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1>Manage Products</h1>
+
+      <div
+        th:if="${success}"
+        class="alert alert-success"
+        th:text="${success}"
+      ></div>
+
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+      <div style="margin-bottom: 20px">
+        <a href="/admin/products/add" class="btn btn-success"
+          >Add New Product</a
+        >
+
+        <!-- Data Seeding Buttons -->
+        <form
+          action="/admin/seed-data"
+          method="post"
+          style="display: inline; margin-left: 10px"
+        >
+          <button
+            type="submit"
+            class="btn"
+            onclick="return confirm('This will add sample products. Continue?')"
+          >
+            Seed Dummy Data
+          </button>
+        </form>
+
+        <form
+          action="/admin/clear-data"
+          method="post"
+          style="display: inline; margin-left: 10px"
+        >
+          <button
+            type="submit"
+            class="btn"
+            style="background: #e74c3c"
+            onclick="return confirm('This will delete ALL products. Are you sure?')"
+          >
+            Clear All Products
+          </button>
+        </form>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Brand</th>
+            <th>Size</th>
+            <th>Color</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.category?.name ?: 'N/A'}"></td>
+            <td th:text="'$' + ${product.price}"></td>
+            <td th:text="${product.stockQuantity}"></td>
+            <td th:text="${product.brand ?: 'N/A'}"></td>
+            <td th:text="${product.size ?: 'N/A'}"></td>
+            <td th:text="${product.color ?: 'N/A'}"></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(products)}">
+            <td colspan="8" style="text-align: center; color: #666">
+              No products found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

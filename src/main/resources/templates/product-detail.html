@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.name} + ' - Sporty Shoes'">Product Detail - Sporty Shoes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+        }
+        .navbar {
+            background-color: #ffd6f3;
+            color: #333;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .navbar-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .navbar a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .product-detail {
+            border: 1px solid #ffe2f6;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .product-image {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #ffe2f6;
+            margin-bottom: 15px;
+            background-color: #ffe6f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .product-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 20px;
+            color: #555;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .product-info {
+            margin-bottom: 15px;
+        }
+        .product-info p {
+            margin: 5px 0;
+        }
+        .buy-form {
+            border: 1px solid #ffe2f6;
+            padding: 15px;
+            background-color: #ffe6f7;
+            margin-top: 20px;
+        }
+        .btn {
+            background-color: #ffdaf4;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background-color: #ffdef5;
+            transform: translateY(-2px);
+        }
+        .btn-back {
+            background-color: #ffdef5;
+            color: #333;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #ffe2f6;
+            color: #333;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+        }
+        .alert-success {
+            background-color: #ffe6f7;
+            border-color: #ffdaf4;
+            color: #333;
+        }
+        .alert-danger {
+            background-color: #ffebee;
+            border-color: #ffcdd2;
+            color: #a94442;
+        }
+        .alert-warning {
+            background-color: #fcf8e3;
+            border-color: #faebcc;
+            color: #8a6d3b;
+        }
+        .alert-info {
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+            color: #31708f;
+        }
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            width: 80px;
+            margin-right: 10px;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="navbar">
+        <div class="navbar-content">
+            <a href="/"><strong>Sporty Shoes</strong></a>
+            <div>
+                <a href="/">Home</a>
+                <a href="/products">Products</a>
+                <span th:if="${session.user != null}">
+                    <a href="/cart/view">Cart</a>
+                    <a href="/purchase/my-orders">My Orders</a>
+                    <a href="/user/logout">Logout (<span th:text="${session.user.fullName}">User</span>)</a>
+                </span>
+                <span th:if="${session.user == null}">
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Alert Messages -->
+        <div th:if="${param.success}" class="alert alert-success">
+            <span th:text="${param.success}">Success message</span>
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-danger">
+            <span th:text="${param.error}">Error message</span>
+        </div>
+
+        <!-- Back Button -->
+        <a href="/products" class="btn-back">← Back to Products</a>
+
+        <div class="product-detail">
+            <!-- Product Image -->
+            <div class="product-image">
+                <img th:src="${product.imageUrl != null ? product.imageUrl : '/images/default-shoe.jpg'}" 
+                     th:alt="${product.name}" 
+                     onerror="this.src='/images/default-shoe.jpg'">
+            </div>
+
+            <!-- Product Information -->
+            <div class="product-title" th:text="${product.name}">Product Name</div>
+            
+            <div class="product-price">
+                $<span th:text="${#numbers.formatDecimal(product.price, 0, 2)}">0.00</span>
+            </div>
+
+            <div class="product-info">
+                <p><strong>Description:</strong> <span th:text="${product.description}">Product description goes here...</span></p>
+                <p><strong>Category:</strong> <span th:text="${product.category.name}">Category</span></p>
+                <p><strong>Available Stock:</strong> <span th:text="${product.stockQuantity}">0</span> units</p>
+            </div>
+
+            <!-- Purchase Form (only for logged-in users) -->
+            <div th:if="${session.user != null and product.stockQuantity > 0}" class="buy-form">
+                <h3>Purchase This Product</h3>
+                
+                <!-- Add to Cart Form -->
+                <form action="/cart/add" method="post" style="margin-bottom: 15px;">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    
+                    <div class="form-row">
+                        <label for="cartQuantity">Quantity:</label>
+                        <input type="number" 
+                               id="cartQuantity" 
+                               name="quantity" 
+                               min="1" 
+                               th:max="${product.stockQuantity}"
+                               value="1" 
+                               required>
+                        <button type="submit" class="btn">Add to Cart</button>
+                    </div>
+                </form>
+                
+                <!-- Buy Now Form -->
+                <form action="/purchase/buy" method="post">
+                    <input type="hidden" name="productId" th:value="${product.id}">
+                    
+                    <div class="form-row">
+                        <label for="quantity">Or Buy Immediately:</label>
+                        <input type="number" 
+                               id="quantity" 
+                               name="quantity" 
+                               min="1" 
+                               th:max="${product.stockQuantity}"
+                               value="1" 
+                               required>
+                        <button type="submit" class="btn">Buy Now</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Out of Stock Message -->
+            <div th:if="${product.stockQuantity == 0}" class="alert alert-warning">
+                This product is currently out of stock.
+            </div>
+
+            <!-- Login Required Message -->
+            <div th:if="${session.user == null}" class="alert alert-info">
+                Please <a href="/login">login</a> to purchase this product.
+            </div>
+        </div>
+    </div>
+</body>
+</body>
+</html>

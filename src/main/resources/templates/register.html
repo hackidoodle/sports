@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Sporty Shoes</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ffd6f3 0%, #ffe6f7 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+      }
+
+      .register-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .register-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .register-header h1 {
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .form-group {
+        flex: 1;
+        margin-bottom: 1rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ffdaf4;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      textarea {
+        resize: vertical;
+        height: 80px;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #ffdaf4;
+        box-shadow: 0 0 0 3px #ffe6f7;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 0.75rem;
+        background: #ffdaf4;
+        color: #333;
+        border: none;
+        border-radius: 30px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .btn:hover {
+        background: #ffdef5;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .links {
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .links a {
+        color: #555;
+        text-decoration: none;
+        margin: 0 0.5rem;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .links a:hover {
+        color: #333;
+      }
+
+      .links a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background: linear-gradient(to right, #ffd6f3, #ffe6f7);
+        transition: width 0.3s ease;
+      }
+
+      .links a:hover::after {
+        width: 100%;
+      }
+
+      .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+      }
+
+      .alert-success {
+        background: #ffe6f7;
+        color: #333;
+        border: 1px solid #ffdaf4;
+      }
+
+      .alert-error {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="register-container">
+      <div class="register-header">
+        <h1>Register</h1>
+        <p>Create your account</p>
+      </div>
+
+      <div
+        th:if="${success}"
+        class="alert alert-success"
+        th:text="${success}"
+      ></div>
+      <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+      <form action="/user/register" method="post">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required />
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            minlength="6"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number:</label>
+          <input type="tel" id="phoneNumber" name="phoneNumber" />
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address:</label>
+          <textarea
+            id="address"
+            name="address"
+            placeholder="Enter your full address"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn">Register</button>
+      </form>
+
+      <div class="links">
+        <a href="/login">Already have an account? Login</a>
+        <br /><br />
+        <a href="/">Back to Home</a>
+      </div>
+    </div>
+  </body>
+</html>
